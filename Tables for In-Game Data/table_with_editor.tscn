@@ -1,0 +1,31 @@
+[gd_scene load_steps=3 format=1]
+
+[ext_resource path="res://table.scn" type="PackedScene" id=1]
+[ext_resource path="res://table_edit.scn" type="PackedScene" id=2]
+
+[node name="EditTables" type="Node"]
+
+__meta__ = { "__editor_plugin_screen__":"2D" }
+
+[node name="test" parent="." instance=ExtResource( 1 )]
+
+Table_Source = "res://data/test.json"
+
+[node name="gui" type="ReferenceFrame" parent="."]
+
+anchor/right = 1
+anchor/bottom = 1
+margin/left = 8.0
+margin/top = 8.0
+margin/right = 8.0
+margin/bottom = 8.0
+focus/ignore_mouse = false
+focus/stop_mouse = true
+size_flags/horizontal = 2
+size_flags/vertical = 2
+
+[node name="edit_test" parent="gui" instance=ExtResource( 2 )]
+
+who = NodePath("../../test")
+
+

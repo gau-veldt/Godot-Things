@@ -1,0 +1,124 @@
+[gd_scene load_steps=2 format=1]
+
+[ext_resource path="res://edit_table.gd" type="Script" id=1]
+
+[node name="table_editor" type="ScrollContainer"]
+
+anchor/right = 1
+anchor/bottom = 1
+margin/left = 8.0
+margin/top = 8.0
+margin/right = 8.0
+margin/bottom = 8.0
+focus/ignore_mouse = false
+focus/stop_mouse = true
+size_flags/horizontal = 3
+size_flags/vertical = 3
+scroll/horizontal = true
+scroll/vertical = true
+script/script = ExtResource( 1 )
+__meta__ = { "__editor_plugin_screen__":"2D" }
+who = null
+hdg_color = Color( 1, 0.5, 0.75, 1 )
+type_color = Color( 0.5, 0.75, 0.75, 1 )
+
+[node name="vertical" type="VBoxContainer" parent="."]
+
+margin/right = 458.0
+margin/bottom = 23.0
+focus/ignore_mouse = false
+focus/stop_mouse = false
+size_flags/horizontal = 2
+size_flags/vertical = 2
+alignment = 0
+
+[node name="operations" type="HBoxContainer" parent="vertical"]
+
+margin/right = 458.0
+margin/bottom = 19.0
+focus/ignore_mouse = false
+focus/stop_mouse = false
+size_flags/horizontal = 2
+size_flags/vertical = 2
+alignment = 0
+
+[node name="btn_rollback" type="Button" parent="vertical/operations"]
+
+margin/right = 62.0
+margin/bottom = 19.0
+focus/ignore_mouse = false
+focus/stop_mouse = true
+size_flags/horizontal = 2
+size_flags/vertical = 2
+toggle_mode = true
+click_on_press = true
+text = "Rollback"
+flat = false
+
+[node name="btn_commit" type="Button" parent="vertical/operations"]
+
+margin/left = 66.0
+margin/right = 123.0
+margin/bottom = 19.0
+focus/ignore_mouse = false
+focus/stop_mouse = true
+size_flags/horizontal = 2
+size_flags/vertical = 2
+toggle_mode = true
+click_on_press = true
+text = "Commit"
+flat = false
+
+[node name="btn_add_row" type="Button" parent="vertical/operations"]
+
+margin/left = 127.0
+margin/right = 194.0
+margin/bottom = 19.0
+focus/ignore_mouse = false
+focus/stop_mouse = true
+size_flags/horizontal = 2
+size_flags/vertical = 2
+toggle_mode = false
+text = "New Row"
+flat = false
+
+[node name="btn_add_str" type="Button" parent="vertical/operations"]
+
+margin/left = 198.0
+margin/right = 319.0
+margin/bottom = 19.0
+focus/ignore_mouse = false
+focus/stop_mouse = true
+size_flags/horizontal = 2
+size_flags/vertical = 2
+toggle_mode = false
+text = "New String Column"
+flat = false
+
+[node name="btn_add_num" type="Button" parent="vertical/operations"]
+
+margin/left = 323.0
+margin/right = 458.0
+margin/bottom = 19.0
+focus/ignore_mouse = false
+focus/stop_mouse = true
+size_flags/horizontal = 2
+size_flags/vertical = 2
+toggle_mode = false
+text = "New Numeric Column"
+flat = false
+
+[node name="editor_view" type="GridContainer" parent="vertical"]
+
+margin/top = 23.0
+margin/right = 458.0
+margin/bottom = 23.0
+focus/ignore_mouse = false
+focus/stop_mouse = false
+size_flags/horizontal = 3
+size_flags/vertical = 3
+custom_constants/vseparation = 1
+custom_constants/hseparation = 3
+columns = 1
+
+
