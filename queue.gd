@@ -31,6 +31,8 @@ func get_message():
 	queue.remove(0)
 	return msg
 
+# the stuff in here is to test.
+# reduce it to a single pass instruction for use in practice
 func _ready():
 	# Called every time the node is added to the scene.
 	# Initialization here
