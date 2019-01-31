@@ -1,0 +1,66 @@
+[gd_scene load_steps=2 format=2]
+
+[sub_resource type="SpatialMaterial" id=1]
+
+albedo_color = Color( 0.576471, 0.576471, 0.576471, 1 )
+metallic = 0.44
+metallic_specular = 0.52
+metallic_texture_channel = 4
+roughness = 0.6
+roughness_texture_channel = 4
+
+[node name="init_root" type="Spatial"]
+
+[node name="Camera" type="Camera" parent="."]
+transform = Transform( -4.37114e-008, 0, -1, 0, 1, 0, 1, 0, -4.37114e-008, -3, 0, 0 )
+current = true
+
+[node name="CSGBox" type="CSGBox" parent="."]
+material = SubResource( 1 )
+
+[node name="the Borg" type="Control" parent="."]
+margin_top = -40.0
+margin_right = 40.0
+
+[node name="Label3" type="Label" parent="the Borg"]
+margin_left = 265.117
+margin_top = 160.956
+margin_right = 390.117
+margin_bottom = 174.956
+rect_scale = Vector2( 4, 4 )
+custom_colors/font_color = Color( 0.25098, 0.12549, 0, 1 )
+text = "Resistance is futile!"
+
+[node name="Label" type="Label" parent="the Borg"]
+margin_left = 260.595
+margin_top = 157.941
+margin_right = 385.595
+margin_bottom = 171.941
+rect_scale = Vector2( 4, 4 )
+custom_colors/font_color = Color( 1, 1, 0, 1 )
+text = "Resistance is futile!"
+
+[node name="Yikes" type="Control" parent="."]
+margin_right = 40.0
+margin_bottom = 40.0
+
+[node name="Label2" type="Label" parent="Yikes"]
+margin_left = 277.176
+margin_top = 378.013
+margin_right = 394.176
+margin_bottom = 409.013
+rect_scale = Vector2( 4, 4 )
+custom_colors/font_color = Color( 0, 0, 0.501961, 1 )
+text = "Yikes!
+Change the scene!	"
+
+[node name="Label4" type="Label" parent="Yikes"]
+margin_left = 274.161
+margin_top = 374.998
+margin_right = 391.161
+margin_bottom = 405.998
+rect_scale = Vector2( 4, 4 )
+custom_colors/font_color = Color( 0.211765, 0.721569, 1, 1 )
+text = "Yikes!
+Change the scene!	"
+

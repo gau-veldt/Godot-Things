@@ -116,5 +116,7 @@ func get_scene() -> Node:
 #    Initializer/constructor
 ############################################################
 func _ready() -> void:
+	snooze=2.0
+	yield(self,"wakeup")
 	load_scene("res://zone_0001.tscn")
 ############################################################
