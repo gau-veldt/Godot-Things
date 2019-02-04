@@ -1,0 +1,174 @@
+[gd_scene load_steps=11 format=2]
+
+[ext_resource path="res://assets/Character.escn" type="PackedScene" id=1]
+[ext_resource path="res://assets/Character.gd" type="Script" id=2]
+[ext_resource path="res://lookat.gd" type="Script" id=3]
+[ext_resource path="res://my_env_01.tres" type="Environment" id=4]
+[ext_resource path="res://assets/water.material" type="Material" id=5]
+[ext_resource path="res://assets/textures/461223115.jpg" type="Texture" id=6]
+[ext_resource path="res://assets/textures/461223134.jpg" type="Texture" id=7]
+
+[sub_resource type="CapsuleShape" id=1]
+
+radius = 0.55
+height = 2.2
+
+[sub_resource type="SpatialMaterial" id=2]
+
+flags_unshaded = true
+flags_world_triplanar = true
+albedo_color = Color( 1, 1, 1, 0.929412 )
+albedo_texture = ExtResource( 6 )
+uv1_triplanar = true
+
+[sub_resource type="SpatialMaterial" id=3]
+
+flags_world_triplanar = true
+albedo_color = Color( 0.784314, 0.784314, 0.784314, 1 )
+albedo_texture = ExtResource( 7 )
+metallic_specular = 0.62
+uv1_triplanar = true
+uv1_triplanar_sharpness = 2.63901
+
+[node name="scene_root" type="Spatial"]
+
+[node name="collider" type="Area" parent="."]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.05, 1 )
+collision_layer = 2
+collision_mask = 3
+
+[node name="CollisionShape" type="CollisionShape" parent="collider"]
+transform = Transform( 1, 0, 0, 0, -4.37114e-008, -1, 0, 1, -4.37114e-008, 0, 1.6, 0 )
+shape = SubResource( 1 )
+
+[node name="player" parent="collider" instance=ExtResource( 1 )]
+script = ExtResource( 2 )
+
+[node name="lighting" type="Spatial" parent="collider/player"]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 3, 0 )
+
+[node name="OmniLight-3+3" type="OmniLight" parent="collider/player/lighting"]
+transform = Transform( -1, 0, 8.74228e-008, 0, 1, 0, -8.74228e-008, 0, -1, -3, 0, 3 )
+light_specular = 0.43
+shadow_bias = -2.24
+omni_range = 5.5
+omni_attenuation = 0.840898
+omni_shadow_mode = 0
+omni_shadow_detail = 0
+
+[node name="OmniLight+3+3" type="OmniLight" parent="collider/player/lighting"]
+transform = Transform( -1, 0, 8.74228e-008, 0, 1, 0, -8.74228e-008, 0, -1, 3, 0, 3 )
+light_specular = 0.43
+shadow_bias = -2.24
+omni_range = 5.5
+omni_attenuation = 0.840898
+omni_shadow_mode = 0
+omni_shadow_detail = 0
+
+[node name="OmniLight+0-3" type="OmniLight" parent="collider/player/lighting"]
+transform = Transform( -1, 0, 8.74228e-008, 0, 1, 0, -8.74228e-008, 0, -1, 0, 0, -3 )
+light_specular = 0.43
+shadow_bias = -2.24
+omni_range = 5.5
+omni_attenuation = 0.840898
+omni_shadow_mode = 0
+omni_shadow_detail = 0
+
+[node name="dolly" type="Spatial" parent="collider/player"]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.37, 0 )
+
+[node name="look" type="Spatial" parent="collider/player/dolly"]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.25, -5.5 )
+script = ExtResource( 3 )
+
+[node name="Camera" type="Camera" parent="collider/player/dolly/look"]
+transform = Transform( -1, 0, 8.74228e-008, 0, 1, 0, -8.74228e-008, 0, -1, 0, 0, 0 )
+environment = ExtResource( 4 )
+current = true
+
+[node name="ocean" type="Spatial" parent="."]
+
+[node name="water" type="CSGBox" parent="ocean"]
+width = 256.0
+height = 0.01
+depth = 256.0
+material = ExtResource( 5 )
+
+[node name="basalt" type="CSGBox" parent="ocean"]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -10, 0 )
+width = 384.0
+height = 0.01
+depth = 384.0
+material = SubResource( 2 )
+
+[node name="world" type="Spatial" parent="."]
+
+[node name="floor" type="Spatial" parent="world"]
+transform = Transform( -1, 0, -8.74228e-008, 0, 1, 0, 8.74228e-008, 0, -1, 0, 0, 0 )
+
+[node name="floor-001-004" type="CSGPolygon" parent="world/floor"]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 4, 4, -52 )
+use_collision = true
+collision_mask = 0
+polygon = PoolVector2Array( 12, 1, 0, 1, 0, 0, 12, 0 )
+depth = 8.0
+material = SubResource( 3 )
+
+[node name="floor+000-004" type="CSGPolygon" parent="world/floor"]
+transform = Transform( -4.37114e-008, 0, 1, 0, 1, 0, -1, 0, -4.37114e-008, 4, 4, -48 )
+use_collision = true
+collision_mask = 0
+polygon = PoolVector2Array( 12, 1, 0, 1, 0, 0, 12, 0 )
+depth = 8.0
+material = SubResource( 3 )
+
+[node name="floor+001-004" type="CSGPolygon" parent="world/floor"]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -16, 4, -52 )
+use_collision = true
+collision_mask = 0
+polygon = PoolVector2Array( 12, 1, 0, 1, 0, 0, 12, 0 )
+depth = 8.0
+material = SubResource( 3 )
+
+[node name="floor+000-003" type="CSGPolygon" parent="world/floor"]
+transform = Transform( -4.37114e-008, 0, 1, 0, 1, 0, -1, 0, -4.37114e-008, 4, 4, -36 )
+use_collision = true
+collision_mask = 0
+polygon = PoolVector2Array( 12, 1, 0, 1, 0, 0, 12, 0 )
+depth = 8.0
+material = SubResource( 3 )
+
+[node name="floor+000-002" type="CSGPolygon" parent="world/floor"]
+transform = Transform( -4.37114e-008, 0, 1, 0, 1, 0, -1, 0, -4.37114e-008, 4, 2, -24 )
+use_collision = true
+collision_mask = 0
+polygon = PoolVector2Array( 12, 3, 0, 1, 0, 0, 12, 2 )
+depth = 8.0
+material = SubResource( 3 )
+
+[node name="floor+000-001" type="CSGPolygon" parent="world/floor"]
+transform = Transform( -4.37114e-008, 0, 1, 0, 1, 0, -1, 0, -4.37114e-008, 4, 0, -12 )
+use_collision = true
+collision_mask = 0
+polygon = PoolVector2Array( 12, 3, 0, 1, 0, 0, 12, 2 )
+depth = 8.0
+material = SubResource( 3 )
+
+[node name="floor+000+000" type="CSGPolygon" parent="world/floor"]
+transform = Transform( -4.37114e-008, 0, 1, 0, 1, 0, -1, 0, -4.37114e-008, 4, 0, 0 )
+use_collision = true
+collision_mask = 0
+polygon = PoolVector2Array( 12, 1, 0, 1, 0, 0, 12, 0 )
+depth = 8.0
+material = SubResource( 3 )
+
+[node name="floor+000+001" type="CSGPolygon" parent="world/floor"]
+transform = Transform( -4.37114e-008, 0, 1, 0, 1, 0, -1, 0, -4.37114e-008, 4, 0, 12 )
+use_collision = true
+collision_mask = 0
+polygon = PoolVector2Array( 12, 1, 0, 1, 0, 0, 12, 0 )
+depth = 8.0
+material = SubResource( 3 )
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="."]
+
