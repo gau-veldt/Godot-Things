@@ -1,0 +1,17 @@
+[gd_resource type="ShaderMaterial" load_steps=3 format=2]
+
+[ext_resource path="res://assets/wave.shader" type="Shader" id=1]
+[ext_resource path="res://assets/461223184.jpg" type="Texture" id=2]
+
+[resource]
+shader = ExtResource( 1 )
+shader_param/alb_color = Color( 0.231373, 0.545098, 0.839216, 0.439216 )
+shader_param/alb_blend = Color( 1, 1, 1, 1 )
+shader_param/alb_blend_alpha = null
+shader_param/wave_rate = 1.0
+shader_param/wave_amplitude = 0.3
+shader_param/water_tex_scale = 4.0
+shader_param/water_glow = Color( 0.168627, 0.686275, 1, 1 )
+shader_param/normal_gran = 0.01
+shader_param/test_tex = ExtResource( 2 )
+
