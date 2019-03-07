@@ -1,0 +1,41 @@
+[gd_scene load_steps=6 format=2]
+
+[ext_resource path="res://Project.gd" type="Script" id=1]
+[ext_resource path="res://GridTerrain.tscn" type="PackedScene" id=2]
+[ext_resource path="res://water.tscn" type="PackedScene" id=3]
+[ext_resource path="res://game_env.tres" type="Environment" id=4]
+[ext_resource path="res://fps_indicator.gd" type="Script" id=5]
+
+[node name="Project" type="Node"]
+script = ExtResource( 1 )
+world_seed = "zwiggy"
+amplitude = 32.0
+
+[node name="Universe" type="Spatial" parent="."]
+
+[node name="chunks" type="Spatial" parent="Universe"]
+
+[node name="m+000+000" parent="Universe/chunks" instance=ExtResource( 2 )]
+
+[node name="water" parent="Universe/chunks" instance=ExtResource( 3 )]
+
+[node name="Camera" type="Camera" parent="Universe"]
+transform = Transform( -0.961582, -0.0824158, 0.261853, 0, 0.953869, 0.300222, -0.274516, 0.288688, -0.917224, -3.709, 3.2, 17.431 )
+environment = ExtResource( 4 )
+current = true
+
+[node name="DirectionalLight" type="DirectionalLight" parent="Universe"]
+transform = Transform( -0.531078, 0.501455, 0.683007, 0.139575, -0.743293, 0.654244, 0.835748, 0.442785, 0.324756, 0, 17.9842, 0 )
+
+[node name="HUD" type="Control" parent="."]
+margin_right = 1024.0
+margin_bottom = 600.0
+rect_min_size = Vector2( 1024, 600 )
+
+[node name="FPS Display" type="Label" parent="HUD"]
+margin_left = 17.1
+margin_top = 19.0
+margin_right = 300.1
+margin_bottom = 44.0
+script = ExtResource( 5 )
+
