@@ -1,6 +1,7 @@
 shader_type spatial;
+//render_mode world_vertex_coords;
 
-uniform sampler2D height_map;
+//uniform sampler2D height_map;
 uniform sampler2D surface_map;
 
 uniform sampler2D tex_0 : hint_albedo;
@@ -23,16 +24,43 @@ varying flat float surf_B;
 varying float Acomp;
 varying float Bcomp;
 
+float hash(vec2 p) {
+  return fract(sin(dot(p * 17.17, vec2(14.91, 67.31))) * 4791.9511);
+}
+
+float noise(vec2 x) {
+  vec2 p = floor(x);
+  vec2 f = fract(x);
+  f = f * f * (3.0 - 2.0 * f);
+  vec2 a = vec2(1.0, 0.0);
+  return mix(mix(hash(p + a.yy), hash(p + a.xy), f.x),
+         mix(hash(p + a.yx), hash(p + a.xx), f.x), f.y);
+}
+
+float fbm(vec2 x) {
+  float height = 0.0;
+  float amplitude = 0.5;
+  float frequency = 3.0;
+  for (int i = 0; i < 6; i++){
+    height += noise(x * frequency) * amplitude;
+    amplitude *= 0.5;
+    frequency *= 2.0;
+  }
+  return height;
+}
+
 void vertex() {
+	vec4 hData;
 	float height;
 	float hA,hB;
 	vec3 A,B;
 	vec2 iUV=vec2(float(int((VERTEX.x+100.0)/200.0)),
 				  float(int((VERTEX.z+100.0)/200.0)));
 	vec2 hUV=(VERTEX.xz+vec2(100.0,100.0)-(iUV*200.0))/200.0;
-	vec4 hData=texture(height_map,hUV)*255.0;
-	height=hData.r/256.0+hData.g;
-	height-=128.0;
+	//hData=texture(height_map,hUV)*255.0;
+	//height=hData.r/256.0+hData.g;
+	//height-=128.0;
+	height=(fbm(VERTEX.xz/256.0)-0.25)*32.0;
 	VERTEX.y+=height;
 	
 	hData=texture(surface_map,hUV);
@@ -41,20 +69,22 @@ void vertex() {
 	Bcomp=hData.b;
 	Acomp=1.0-hData.b;
 
-	iUV=vec2(float(int((VERTEX.x+100.0)/200.0)),
-			 float(int((VERTEX.z+100.0)/200.0)));
-	hUV=vec2(VERTEX.xz+vec2(99.0,100.0)-(iUV*200.0))/200.0;
-	hData=texture(height_map,hUV)*255.0;
-	hA=hData.r/256.0+hData.g;
-	hA-=128.0;
+	//iUV=vec2(float(int((VERTEX.x+100.0)/200.0)),
+	//		 float(int((VERTEX.z+100.0)/200.0)));
+	//hUV=vec2(VERTEX.xz+vec2(99.0,100.0)-(iUV*200.0))/200.0;
+	//hData=texture(height_map,hUV)*255.0;
+	//hA=hData.r/256.0+hData.g;
+	//hA-=128.0;
+	hA=(fbm((VERTEX.xz+vec2(-1.0,0.0))/256.0)-0.25)*32.0;
 	A=vec3(VERTEX.x-1.0,hA,VERTEX.z);
 
-	iUV=vec2(float(int((VERTEX.x+100.0)/200.0)),
-			 float(int((VERTEX.z+100.0)/200.0)));
-	hUV=vec2(VERTEX.xz+vec2(99.0,99.0)-(iUV*200.0))/200.0;
-	hData=texture(height_map,hUV)*255.0;
-	hB=hData.r/256.0+hData.g;
-	hB-=128.0;
+	//iUV=vec2(float(int((VERTEX.x+100.0)/200.0)),
+	//		 float(int((VERTEX.z+100.0)/200.0)));
+	//hUV=vec2(VERTEX.xz+vec2(99.0,99.0)-(iUV*200.0))/200.0;
+	//hData=texture(height_map,hUV)*255.0;
+	//hB=hData.r/256.0+hData.g;
+	//hB-=128.0;
+	hB=(fbm((VERTEX.xz+vec2(-1.0,-1.0))/256.0)-0.25)*32.0;
 	B=vec3(VERTEX.x-1.0,hA,VERTEX.z-1.0);
 	NORMAL=normalize(cross(B-VERTEX,A-VERTEX));
 	

@@ -1,0 +1,149 @@
+This tutorial is based on the newest Godot, which, at the time of making this
+tutorial is Godot 3.1 beta 9.
+
+The goal:
+
+We want to make a large world game RPG, like Elder Scrolls or World of
+Warcraft, or an expanding sandbox like Minecraft.
+
+The problem:
+Godot, as of 3.1, currently has no terrain node.
+
+We might try making procedural terrain.  In GDScript it is too slow to do in
+real time.  We could use a GDNative?  This requires a compiler and while it is
+not necessary to rebuild the entire engine it is necessary to compile the
+source for every platform we intead the game to run with.  If we don't happen
+to own an Apple computer we won't be able to release a GDNative based game for
+that platform.
+
+An alternative is to use a shader to generate the height and is the method
+we'll look at in this tutorial.  In the end we still wind up doing some
+procedural generation.  However the mesh we'll generate is only the trimesh for
+the physics engine since the shader will not do that for us.  We won't need to
+actually generate that much geometry, as we only care about the geometry under
+a given body.  More on that later.
+
+Godot makes shaders fun.  The world will update as we write it.
+Any moment the code is in a valid syntax form the world display will update to
+show the effect of the shader in the editor so testing out our shader will not
+require us to run the game every time.
+
+Where do we start?
+
+Step 1: Create a grid mesh
+
+The answer is we won't start in Godot.  That's right, we're going into Blender
+first.  What we want from blender is a grid and only a grid.  We may export as
+better collada, Godot Scene (ESCN) or even (WaveFront) OBJ.  We don't need
+anything other than the mesh either.  How large do we want this grid?
+For the default camera we can see in a circle with a 100-unit radius so let's
+use that metric for the grid.  We want to be able to go 100 units in any
+direction from where a character starts to the grid's edge so it actually needs
+to be 200 units in length per side.  For 200 edges don't be surprised that
+we actually end up with 201 vertices in each direction.  For a simple
+explanation, look at the sequence (-3, -2, -1, 0, 1, 2, 3) which would be the
+case for a grid that went 3 units in each direction.  The zero added a vertex
+so we end up with seven points rather than six.  Ah, but now count the edges
+in that range (for that above example everywhere I put a comma would be the
+location of an edge).  There's six.  All's good.  On our grid with 201 vertices
+there will be 200 edges in each direction which is exactly what we want.
+
+Side point: Our grid will have 40401 vertices, 80400 edges, 40k faces, and 80k
+triangles.
+
+We can go ahead and go into Godot and create the project but there is not much
+to see at this point.  Wow, nice, FLAT, grid we have here in the 3D world.
+
+Yeah, time to do something about that.
+
+Step 2: Create a height map.
+
+*******
+This is looking like it would best be a whole other tutorial so I'll skip
+the TL;DR here and use a very simple generator script.
+
+The key take here is that noise patterns in GIMP will, at best, only work
+in a single (greyscale) channel.  That's 0-255 possible elevations which is
+not nearly enough.  We either end up with boring rolling flats we can barely
+call hills, or we end up with just a change in one to the elevation going
+from sea-level to three stories up.  That won't do so at minimum we want
+to use two texture channels to store the height, two gives us 0-65535
+possible elevations which is much better.  We can be 32 km up or down
+with that range.  But why waste that third channel?  If we use it we'll
+get a height range of 8388 km up or down.  Everywhere from magma core
+to orbit!  Furthermore we can downscale that number in the shader to have
+stairsteps less than one metre (our poor avatar will be hiking up very steep
+45-degree 100% grades).  Scaling down by 32 still gives us 262 km (we can still
+pass the kaarman line and get our astronaut wings) and hiking will be up much
+more gentle 3.125% grades (1.5" every four feet).  If we really want to go to
+town the alpha channel is available too (we aren't rendering this texutre after
+all) but we'll run into precision problems pushing those shader floats much
+past 2^24.  If you really want to do this I suggest using the alpha as the
+1/256th fraction of the height in the shader for something like this
+pseudocode:
+
+texel.a/256.0 + texel.r + texel.g*256.0 + texel.b*65536.0
+
+We'll move on to step 3.
+******
+
+I'm going to suggest a separate script for this step and we'll generate the
+height map in a Godot script and save the resulting map to a PNG.  The reason
+being is we will then have the benefit of making a noise function in GDScript
+which is something that is NOT much fun to do in a shader since there's a lot
+of chicanery to work around the limited types and functions available to a
+shader and having a shader make a noise source requires adding a render pass
+to allow the render-to-texture shader to run before the terrain shader.
+
+The most important part of the script:
+
+export(String) var seed
+
+We want a repeatable replay of the noise so that chunk generation is coherent
+otherwise we may wind up with a high elevation alpine slope becoming ocean at
+a chunk boundary which would be very very bad.  We also want new chunks to be
+generated as a growing spiral of rings so we don't add a width or height factor
+that would limit the world size.  We generate a new chunk by figuring out
+where it is in the spiral and backtracking until we hit the origin or another
+populated chunk.  We'll have each chunk store the seed coming into it so that
+generating chunks we can backtrack to the nearest previous neighbouring
+chunk.  We may not wish to generate each and every chunk in between (think
+teleportation) so we need a fast way to replay just the noise stream of
+intermediate chunks until we reach the chunk we do wish to generate.  We
+have to be able to replay the noise consistently on a per-chunk basis or things
+won't line up on chunk boundaries later on.  It's important to note also that
+if we change the order we draw noise numbers midway, or how many numbers get
+drawn we throw *everything* off down the line.  This is why in games like
+Factorio we find that changing one map setting changes the entire map layout
+(When creating a new Factorio map adjust settings other than the seed first,
+with the map seed being the absolute very last setting adjusted).
+
+Step 3: Vertex shader
+
+
+
+
+
+Raycasting a height map:
+
+
+(I assume a straight-down ray query to ask for the height at the ray intersection point)
+
+1. Figure out which cell the ray intersects.  This is easy for a straight-down ray: rayPlane=Vector2(ray.x,ray.z)
+
+2. Take the floor of these two components lowPt=Vector2(floor(ray.x),floor(ray.z))
+
+3. We will now know the ray is in the cell bounded by corners lowPt and lowPt+Vector2(1,1)
+
+4. Query the heightmap at lowPt, lowPt+Vector2(1,0), lowPt+Vector2(0,1) and lowPt+Vector2(1,1) 
+
+5. Subtract the lowPt from rayPlane: rayCell=rayPlane-lowPt  This gives us the fractional position inside the cell
+
+6. We now do a bilinear interpolation of the four height points from step 4 using rayPlane.x and rayPlane.y, or blerp:
+
+func blerp(h00,h10,h01,h11,h,v):
+	var hf=h-floor(h)
+	var vf=v-floor(v)
+	return lerp(lerp(h00,h10,hf),lerp(h01,h11,hf),vf)
+	
+7. The result is the height at the ray intersection.

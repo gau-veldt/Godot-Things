@@ -1,10 +1,22 @@
-[gd_scene load_steps=6 format=2]
+[gd_scene load_steps=7 format=2]
 
 [ext_resource path="res://Project.gd" type="Script" id=1]
 [ext_resource path="res://GridTerrain.tscn" type="PackedScene" id=2]
 [ext_resource path="res://water.tscn" type="PackedScene" id=3]
 [ext_resource path="res://game_env.tres" type="Environment" id=4]
 [ext_resource path="res://fps_indicator.gd" type="Script" id=5]
+
+[sub_resource type="Animation" id=1]
+resource_name = "Camera"
+length = 20.0
+step = 0.25
+tracks/0/type = "transform"
+tracks/0/path = NodePath("Camera")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = PoolRealArray( 0, 1, -25, 2.5, -25, 0.0447146, 0.936079, 0.12912, -0.324167, 1, 1, 1, 1, 1, -25, 2.5, -25, 0.0447146, 0.936079, 0.12912, -0.324167, 1, 1, 1, 9, 1, 12, 7.5, 12, 0.0447146, 0.936079, 0.12912, -0.324167, 1, 1, 1, 12, 1, 12, 7.5, 12, -0.129121, 0.324144, 0.0447114, 0.936087, 1, 1, 1 )
 
 [node name="Project" type="Node"]
 script = ExtResource( 1 )
@@ -16,16 +28,21 @@ amplitude = 32.0
 [node name="chunks" type="Spatial" parent="Universe"]
 
 [node name="m+000+000" parent="Universe/chunks" instance=ExtResource( 2 )]
+transform = Transform( 1, 0, 1.19209e-007, 0, 1, -2.98023e-008, 0, 0, 1, 7.62939e-006, -1.43051e-006, 9.53674e-006 )
 
 [node name="water" parent="Universe/chunks" instance=ExtResource( 3 )]
 
 [node name="Camera" type="Camera" parent="Universe"]
-transform = Transform( -0.961582, -0.0824158, 0.261853, 0, 0.953869, 0.300222, -0.274516, 0.288688, -0.917224, -3.709, 3.2, 17.431 )
+transform = Transform( -0.785833, 0.167426, -0.595345, 1.49012e-008, 0.962657, 0.270723, 0.618439, 0.212743, -0.756488, -25.637, 2.5, -24.2142 )
 environment = ExtResource( 4 )
 current = true
 
 [node name="DirectionalLight" type="DirectionalLight" parent="Universe"]
-transform = Transform( -0.531078, 0.501455, 0.683007, 0.139575, -0.743293, 0.654244, 0.835748, 0.442785, 0.324756, 0, 17.9842, 0 )
+transform = Transform( -0.29965, -0.547744, -0.781144, 0.0475006, -0.826317, 0.561199, -0.952866, 0.131058, 0.273624, 0, 17.9842, 0 )
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="Universe"]
+autoplay = "Camera"
+anims/Camera = SubResource( 1 )
 
 [node name="HUD" type="Control" parent="."]
 margin_right = 1024.0
