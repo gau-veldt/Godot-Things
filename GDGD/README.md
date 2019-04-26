@@ -1,10 +1,17 @@
-GDNative via GDScript autocompiler project
+GDNative via GDScript toolchain-free autocompiler project
 License: MIT (same as Godot engine)
 
+Goal: Ability to have automatic acceleration of existing GDScripted objects to from vanilla
+      Godot with no additional toolchain suites required (tool chains are common in linux
+      but more complex to use in Windows due to the extensive footprint of proprietary
+      tools in the windows development ecosystem).  Any tools that are included (like
+      assemblers) must have suitable licensing.
+
 Note: includes NASM which is licnesed separately via 2-clause BSD license.  I believe this to
-      be compatible to MIT so can be used in an exported game without restriction.
+      be compatible to MIT so it may be used in an exported game without restriction.
 
 Note 2: Temporary use of GoLink for development.  GoLink is distributable noncommercially only
-        precluding its use in exported games (which may become commercial).
+        precluding its use in exported games and any project becomming commercial in any way
+        (for example I would have to ditch GoLink prior to asking for Patreon assistance).
         Therefore I'll need to migrate away from a linker eventually and generate binary
         dynalib GDNative blobs directly.
