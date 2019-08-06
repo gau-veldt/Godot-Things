@@ -3,13 +3,30 @@ extends Control
 var bgm : AudioStreamOGGVorbis = null
 var where : String = ""
 
-onready var player=$Player
-onready var fsDlg=$FileSelect
-onready var chgBtn=$ChangeSong
-onready var quitBtn=$ForceQuit
+onready var player=$Player as AudioStreamPlayer
+onready var fsDlg=$FileSelect as FileDialog
+onready var chgBtn=$ChangeSong as Button
+onready var quitBtn=$ForceQuit as Button
 
-# Select a background song, play it
-func change_bgm(newFile):
+# Open the file chooser
+func open_dialog():
+	chgBtn.hide()
+	fsDlg.popup_centered()
+
+# Dialog was cancelled
+func cancelled():
+	fsDlg.hide()
+	if where=="":
+		get_tree().quit()
+	else:
+		chgBtn.show()
+
+# quit button
+func quit_now():
+	get_tree().quit()
+
+# Play background song
+func change_bgm(newFile:String):
 	fsDlg.hide()
 	chgBtn.show()
 	where=newFile
@@ -18,26 +35,11 @@ func change_bgm(newFile):
 	player.stream=bgm
 	player.play()
 
-# Open the file chooser
-func open_dialog():
-	chgBtn.hide()
-	fsDlg.popup_centered()
-
-func cancelled():
-	fsDlg.hide()
-	if where=="":
-		get_tree().quit()
-	else:
-		chgBtn.show()
-
-func quit_now():
-	get_tree().quit()
-
 func kludge_loader(arg_path) -> AudioStreamOGGVorbis:
 	var f:=File.new()
 	f.open(arg_path,f.READ)
 	var blob:=f.get_buffer(f.get_len())
-	var audio=AudioStreamOGGVorbis.new()
+	var audio:=AudioStreamOGGVorbis.new()
 	audio.data=blob
 	f.close()
 	return audio

@@ -25,6 +25,7 @@ margin_left = 16.5
 margin_top = 15.0
 margin_right = 410.5
 margin_bottom = 66.0
+text = "Change Song"
 
 [node name="Player" type="AudioStreamPlayer" parent="."]
 
