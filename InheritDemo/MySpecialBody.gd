@@ -1,5 +1,4 @@
 extends RigidBody
-class MySpecialBody
 
 
 # Declare member variables here. Examples:
