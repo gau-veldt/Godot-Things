@@ -1,4 +1,5 @@
 extends RigidBody
+class_name MyRigidBody
 
 
 # Declare member variables here. Examples:
