@@ -1,0 +1,24 @@
+[gd_scene load_steps=3 format=2]
+
+[ext_resource path="res://test.gd" type="Script" id=1]
+[ext_resource path="res://MySpecialBody.tscn" type="PackedScene" id=2]
+
+[node name="test" type="Label"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_left = 39.685
+margin_top = 30.1606
+margin_right = -549.315
+margin_bottom = -531.839
+rect_scale = Vector2( 2, 2 )
+text = "foo"
+script = ExtResource( 1 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="b1" parent="." instance=ExtResource( 2 )]
+MySpecialVar = "voodoo"
+
+[node name="b2" parent="." instance=ExtResource( 2 )]
+MySpecialVar = "magic"
